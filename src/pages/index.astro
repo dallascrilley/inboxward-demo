@@ -1,0 +1,52 @@
+---
+// Inboxward — Deliverability cockpit
+import '../styles/inboxward.css';
+const title = "Inboxward — 200 sending domains. 47 are in trouble. You don't know which.";
+const description = "Email deliverability cockpit auditing SPF, DKIM, DMARC, blacklist status, and inbox placement across all sending domains.";
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="robots" content="noindex" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+  </head>
+  <body>
+    <div class="iw-root">
+      <nav class="iw-nav" aria-label="Inboxward navigation">
+        <span class="iw-logo">inboxward</span>
+        <span class="iw-nav-sep" aria-hidden="true"></span>
+        <span class="iw-nav-label">Deliverability Cockpit</span>
+        <span class="iw-nav-spacer"></span>
+        <span class="iw-nav-label" style="font-family:var(--iw-mono);font-size:11px;color:var(--iw-muted)">Synthetic data only</span>
+      </nav>
+
+      <div class="iw-banner" role="status">
+        <span class="iw-banner-icon" aria-hidden="true">◈</span>
+        <p class="iw-banner-text"><strong>Synthetic domain data only.</strong> These 12 domains are fabricated, but the SPF/DKIM/DMARC validation logic, risk scoring, and remediation playbook are production-grade. <em>No real DNS lookups, no live blacklist queries.</em></p>
+      </div>
+
+      <div class="iw-layout">
+        <aside class="iw-sidebar" aria-label="Domain list">
+          <div class="iw-sidebar-header">
+            <span class="iw-sidebar-title">Domains</span>
+          </div>
+          <div class="iw-stats" id="iw-stats"></div>
+          <div class="iw-domain-list" id="iw-domain-list" role="list" aria-label="Sending domains"></div>
+        </aside>
+
+        <main class="iw-main" id="iw-detail-panel" role="main" aria-label="Domain detail">
+          <div class="iw-placeholder">Select a domain to inspect deliverability posture.</div>
+        </main>
+      </div>
+    </div>
+    <script>import '../components/app.ts';</script>
+  </body>
+</html>

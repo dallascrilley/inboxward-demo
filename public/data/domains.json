@@ -1,0 +1,296 @@
+[
+   {
+      "id": "dom_001",
+      "name": " outreach.acmesaas.com",
+      "registrar": "Namecheap",
+      "created_date": "2025-01-15",
+      "spf_record": "v=spf1 include:_spf.google.com include:mailgun.org include:sendgrid.net include:amazonses.com ~all",
+      "spf_status": "pass",
+      "spf_mechanism_count": 4,
+      "dkim_selector": "google",
+      "dkim_key_age_days": 45,
+      "dkim_status": "pass",
+      "dmarc_policy": "quarantine",
+      "dmarc_alignment": "relaxed",
+      "dmarc_pct": 100,
+      "blacklist_statuses": [],
+      "warmup_days": 120,
+      "warmup_health": 95,
+      "last_inbox_test": {
+         "provider": "Gmail",
+         "placement": 98,
+         "date": "2026-05-28"
+      }
+   },
+   {
+      "id": "dom_002",
+      "name": "sales.acmesaas.com",
+      "registrar": "Cloudflare",
+      "created_date": "2025-03-20",
+      "spf_record": "v=spf1 include:_spf.google.com ~all",
+      "spf_status": "pass",
+      "spf_mechanism_count": 1,
+      "dkim_selector": "google",
+      "dkim_key_age_days": 142,
+      "dkim_status": "warn",
+      "dmarc_policy": "none",
+      "dmarc_alignment": "relaxed",
+      "dmarc_pct": 0,
+      "blacklist_statuses": [],
+      "warmup_days": 60,
+      "warmup_health": 88,
+      "last_inbox_test": {
+         "provider": "Outlook",
+         "placement": 82,
+         "date": "2026-05-27"
+      }
+   },
+   {
+      "id": "dom_003",
+      "name": "marketing.acmesaas.com",
+      "registrar": "GoDaddy",
+      "created_date": "2024-08-10",
+      "spf_record": "v=spf1 include:mailgun.org -all",
+      "spf_status": "pass",
+      "spf_mechanism_count": 1,
+      "dkim_selector": "mg",
+      "dkim_key_age_days": 312,
+      "dkim_status": "fail",
+      "dmarc_policy": "none",
+      "dmarc_alignment": "relaxed",
+      "dmarc_pct": 0,
+      "blacklist_statuses": [
+         {
+            "list": "Spamhaus DBL",
+            "status": "listed",
+            "reason": "spamtrap hit"
+         }
+      ],
+      "warmup_days": 280,
+      "warmup_health": 45,
+      "last_inbox_test": {
+         "provider": "Gmail",
+         "placement": 12,
+         "date": "2026-05-25"
+      }
+   },
+   {
+      "id": "dom_004",
+      "name": "newsletter.acmesaas.com",
+      "registrar": "Namecheap",
+      "created_date": "2025-06-01",
+      "spf_record": "v=spf1 include:sendgrid.net include:_spf.google.com ~all",
+      "spf_status": "pass",
+      "spf_mechanism_count": 2,
+      "dkim_selector": "sg",
+      "dkim_key_age_days": 28,
+      "dkim_status": "pass",
+      "dmarc_policy": "reject",
+      "dmarc_alignment": "strict",
+      "dmarc_pct": 100,
+      "blacklist_statuses": [],
+      "warmup_days": 30,
+      "warmup_health": 72,
+      "last_inbox_test": {
+         "provider": "Yahoo",
+         "placement": 91,
+         "date": "2026-05-29"
+      }
+   },
+   {
+      "id": "dom_005",
+      "name": "support.acmesaas.com",
+      "registrar": "Cloudflare",
+      "created_date": "2024-01-20",
+      "spf_record": "",
+      "spf_status": "fail",
+      "spf_mechanism_count": 0,
+      "dkim_selector": "",
+      "dkim_key_age_days": 0,
+      "dkim_status": "fail",
+      "dmarc_policy": "none",
+      "dmarc_alignment": "relaxed",
+      "dmarc_pct": 0,
+      "blacklist_statuses": [
+         {
+            "list": "Barracuda",
+            "status": "listed",
+            "reason": "volume spike"
+         }
+      ],
+      "warmup_days": 0,
+      "warmup_health": 0,
+      "last_inbox_test": {
+         "provider": "Gmail",
+         "placement": 3,
+         "date": "2026-05-20"
+      }
+   },
+   {
+      "id": "dom_006",
+      "name": "partners.acmesaas.com",
+      "registrar": "GoDaddy",
+      "created_date": "2025-02-14",
+      "spf_record": "v=spf1 include:_spf.google.com include:mailgun.org include:sendgrid.net include:amazonses.com include:zendesk.com ~all",
+      "spf_status": "warn",
+      "spf_mechanism_count": 5,
+      "dkim_selector": "google",
+      "dkim_key_age_days": 67,
+      "dkim_status": "pass",
+      "dmarc_policy": "quarantine",
+      "dmarc_alignment": "relaxed",
+      "dmarc_pct": 50,
+      "blacklist_statuses": [],
+      "warmup_days": 90,
+      "warmup_health": 85,
+      "last_inbox_test": {
+         "provider": "Outlook",
+         "placement": 76,
+         "date": "2026-05-28"
+      }
+   },
+   {
+      "id": "dom_007",
+      "name": "billing.acmesaas.com",
+      "registrar": "Namecheap",
+      "created_date": "2024-11-05",
+      "spf_record": "v=spf1 include:_spf.google.com ~all",
+      "spf_status": "pass",
+      "spf_mechanism_count": 1,
+      "dkim_selector": "google",
+      "dkim_key_age_days": 89,
+      "dkim_status": "pass",
+      "dmarc_policy": "quarantine",
+      "dmarc_alignment": "strict",
+      "dmarc_pct": 100,
+      "blacklist_statuses": [],
+      "warmup_days": 180,
+      "warmup_health": 92,
+      "last_inbox_test": {
+         "provider": "Gmail",
+         "placement": 96,
+         "date": "2026-05-30"
+      }
+   },
+   {
+      "id": "dom_008",
+      "name": "events.acmesaas.com",
+      "registrar": "Cloudflare",
+      "created_date": "2025-04-10",
+      "spf_record": "v=spf1 include:sendgrid.net ~all",
+      "spf_status": "pass",
+      "spf_mechanism_count": 1,
+      "dkim_selector": "sg",
+      "dkim_key_age_days": 180,
+      "dkim_status": "warn",
+      "dmarc_policy": "none",
+      "dmarc_alignment": "relaxed",
+      "dmarc_pct": 0,
+      "blacklist_statuses": [],
+      "warmup_days": 45,
+      "warmup_health": 78,
+      "last_inbox_test": {
+         "provider": "Yahoo",
+         "placement": 84,
+         "date": "2026-05-26"
+      }
+   },
+   {
+      "id": "dom_009",
+      "name": "nurture.acmesaas.com",
+      "registrar": "GoDaddy",
+      "created_date": "2025-01-30",
+      "spf_record": "v=spf1 include:mailgun.org include:_spf.google.com ~all",
+      "spf_status": "pass",
+      "spf_mechanism_count": 2,
+      "dkim_selector": "mg",
+      "dkim_key_age_days": 98,
+      "dkim_status": "pass",
+      "dmarc_policy": "reject",
+      "dmarc_alignment": "strict",
+      "dmarc_pct": 100,
+      "blacklist_statuses": [
+         {
+            "list": "SURBL",
+            "status": "listed",
+            "reason": "malware URL"
+         }
+      ],
+      "warmup_days": 110,
+      "warmup_health": 55,
+      "last_inbox_test": {
+         "provider": "Gmail",
+         "placement": 34,
+         "date": "2026-05-24"
+      }
+   },
+   {
+      "id": "dom_010",
+      "name": "onboarding.acmesaas.com",
+      "registrar": "Namecheap",
+      "created_date": "2025-07-15",
+      "spf_record": "v=spf1 include:_spf.google.com ~all",
+      "spf_status": "pass",
+      "spf_mechanism_count": 1,
+      "dkim_selector": "google",
+      "dkim_key_age_days": 12,
+      "dkim_status": "pass",
+      "dmarc_policy": "quarantine",
+      "dmarc_alignment": "relaxed",
+      "dmarc_pct": 100,
+      "blacklist_statuses": [],
+      "warmup_days": 14,
+      "warmup_health": 65,
+      "last_inbox_test": {
+         "provider": "Outlook",
+         "placement": 88,
+         "date": "2026-05-29"
+      }
+   },
+   {
+      "id": "dom_011",
+      "name": "retention.acmesaas.com",
+      "registrar": "Cloudflare",
+      "created_date": "2024-05-20",
+      "spf_record": "v=spf1 include:mailgun.org -all",
+      "spf_status": "pass",
+      "spf_mechanism_count": 1,
+      "dkim_selector": "mg",
+      "dkim_key_age_days": 380,
+      "dkim_status": "fail",
+      "dmarc_policy": "none",
+      "dmarc_alignment": "relaxed",
+      "dmarc_pct": 0,
+      "blacklist_statuses": [],
+      "warmup_days": 360,
+      "warmup_health": 70,
+      "last_inbox_test": {
+         "provider": "Yahoo",
+         "placement": 71,
+         "date": "2026-05-27"
+      }
+   },
+   {
+      "id": "dom_012",
+      "name": "feedback.acmesaas.com",
+      "registrar": "GoDaddy",
+      "created_date": "2025-09-01",
+      "spf_record": "v=spf1 include:_spf.google.com include:sendgrid.net ~all",
+      "spf_status": "pass",
+      "spf_mechanism_count": 2,
+      "dkim_selector": "google",
+      "dkim_key_age_days": 35,
+      "dkim_status": "pass",
+      "dmarc_policy": "quarantine",
+      "dmarc_alignment": "relaxed",
+      "dmarc_pct": 100,
+      "blacklist_statuses": [],
+      "warmup_days": 25,
+      "warmup_health": 80,
+      "last_inbox_test": {
+         "provider": "Gmail",
+         "placement": 93,
+         "date": "2026-05-30"
+      }
+   }
+]
