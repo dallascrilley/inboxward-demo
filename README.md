@@ -1,37 +1,62 @@
 # Inboxward
 
+[![CI](https://github.com/dallascrilley/inboxward-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/dallascrilley/inboxward-demo/actions/workflows/ci.yml)
+
 > **200 sending domains. 47 are in trouble. You don't know which.**
 
-Inboxward is a client-side email deliverability cockpit that audits SPF, DKIM, DMARC, blacklist status, and inbox placement across all sending domains. It generates auto-prioritized remediation playbooks with zero backend.
+Inboxward is an email-deliverability cockpit that audits SPF, DKIM, and DMARC across sending domains, scores deliverability risk, and generates prioritized remediation. It is a **hybrid proof**: a real backend performs live DNS inspection of any domain you type, and a synthetic fleet stands in for the signals that require paid external feeds.
 
-**Live demo:** [demos.dallascrilley.com/inboxward](https://demos.dallascrilley.com/inboxward)
+**Live demo:** [demos.dallascrilley.com/inboxward](https://demos.dallascrilley.com/inboxward) — type any domain (try `openai.com`) and the cockpit inspects it live.
 
-## What it proves
+## Real vs. synthetic — the honest boundary
 
-- **Deliverability infrastructure fluency** — understands SPF flattening, DKIM rotation, DMARC alignment, and blacklist delisting workflows.
-- **Risk scoring** — composite 0-100 score weighted by actual business impact of each failure mode.
-- **Remediation prioritization** — auto-generated fixes ranked by severity, not just listed.
-- **Zero-backend architecture** — all validation logic, scoring, and playbook generation runs in vanilla TypeScript.
+This is the line a reviewer should be able to see at a glance:
+
+| Signal | Source |
+|---|---|
+| SPF record + lookup-count risk | **Live** — DNS-over-HTTPS query at request time |
+| DMARC policy / alignment / `pct` | **Live** — DNS-over-HTTPS query at request time |
+| DKIM presence (common selectors) | **Live** — probes 12 known ESP selectors via TXT/CNAME |
+| Blacklist status (Spamhaus, etc.) | Synthetic — requires paid/rate-limited feeds |
+| Inbox placement / seedlist tests | Synthetic — requires a seedlist provider |
+
+The synthetic fleet (`public/data/domains.json`) demonstrates the scoring and remediation UI at scale; the live path proves the inspection logic is real.
+
+## The backend
+
+[`functions/inboxward/inspect.js`](functions/inboxward/inspect.js) is a **Cloudflare Pages Function** — `GET /inboxward/inspect?domain=example.com`. It:
+
+- normalizes/validates the domain, then resolves `TXT`, `_dmarc` `TXT`, and `<selector>._domainkey` records via `dns.google` (DNS-over-HTTPS) — no API keys, no stored state;
+- parses SPF (counting the DNS-querying mechanisms against the [SPF-10 lookup limit](https://datatracker.ietf.org/doc/html/rfc7208#section-4.6.4)), DMARC (`p`, `pct`, `adkim`/`aspf` alignment), and DKIM (TXT or CNAME-delegated);
+- returns a normalized verdict in the same shape as a synthetic domain, so the UI treats live and synthetic identically.
+
+```bash
+curl "https://demos.dallascrilley.com/inboxward/inspect?domain=openai.com"
+```
+
+The parsing helpers are pure functions, exported and unit-tested in [`tests/inspect.test.js`](tests/inspect.test.js).
 
 ## Run locally
 
 ```bash
 pnpm install
-pnpm dev
+pnpm test                                    # unit tests for the DNS-parsing logic
+pnpm dev                                     # static site only (synthetic fleet)
+pnpm build && npx wrangler pages dev dist    # site + live backend together
 ```
 
-Open `http://localhost:4321`. The demo loads 12 synthetic domains from `public/data/domains.json`.
+Open `http://localhost:4321` for the UI; the live inspection endpoint is served by `wrangler pages dev`.
+
+## What it proves
+
+- **Deliverability infrastructure fluency** — SPF flattening, DKIM rotation, DMARC alignment, blacklist delisting.
+- **Real protocol work** — live DoH resolution and correct SPF/DMARC/DKIM record parsing, not a mock.
+- **Risk scoring** — composite 0–100 score weighted by business impact of each failure mode.
+- **Honest system boundaries** — the live/synthetic split is explicit in the UI, the API response (`source`, `lookup_metadata`), and this README.
 
 ## Architecture
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for design decisions, scoring formula, and tradeoffs.
-
-## Honest limits
-
-- **No live DNS lookups** — records are synthetic.
-- **No real blacklist queries** — Spamhaus, Barracuda, SURBL status is fabricated.
-- **No inbox placement API** — test results are synthetic.
-- **Single-tenant** — no multi-org view.
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for the data model, scoring formula, backend design, and tradeoffs.
 
 ## License
 

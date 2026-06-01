@@ -4,7 +4,21 @@
 
 - **Astro 5** — static site generator
 - **TypeScript** — vanilla TS, no framework
-- **No backend, no API keys, no environment variables**
+- **Cloudflare Pages Function** — one serverless endpoint for live DNS inspection
+- **No API keys, no environment variables, no stored state** — the backend is a stateless DNS-over-HTTPS proxy
+
+## Live backend
+
+`functions/inboxward/inspect.js` handles `GET /inboxward/inspect?domain=…` and performs real deliverability inspection at request time:
+
+1. **Normalize + validate** the domain (strip scheme/path/trailing dot; reject non-hosts).
+2. **Resolve in parallel** via `dns.google` DNS-over-HTTPS: root `TXT` (for SPF), `_dmarc.<domain>` `TXT`, and `<selector>._domainkey.<domain>` across 12 common ESP selectors (DKIM has no discovery mechanism, so deliverability tools probe a known set).
+3. **Parse** SPF (count DNS-querying mechanisms against the SPF-10 lookup limit), DMARC (`p`/`pct`/`adkim`/`aspf`), and DKIM (TXT or CNAME-delegated).
+4. **Return** a verdict in the same shape as a synthetic domain (`source: "live"`, plus `lookup_metadata` recording the provider, raw records, and the live/synthetic boundary), so the UI renders live and synthetic domains identically.
+
+Pure parsing helpers (`normalizeDomain`, `parseDmarc`, `countSpfMechanisms`, …) are exported and unit-tested in `tests/inspect.test.js`; the network-bound resolver is kept thin and out of the test surface.
+
+**Boundary:** SPF/DMARC/DKIM are live; blacklist status and inbox placement remain synthetic because they require paid or rate-limited external feeds (Spamhaus, seedlist providers). The synthetic fleet exercises scoring/remediation at scale; the live path proves the inspection is real.
 
 ## Data model
 
@@ -75,23 +89,25 @@ Remediations are generated deterministically from domain state:
 | `src/components/types.ts` | Shared interfaces |
 | `src/styles/inboxward.css` | Dark cockpit theme, risk color system, responsive grid |
 
-## What was cut for scope
+## What is live vs. cut for scope
 
-- **Live DNS resolution** — synthetic records only
-- **Real blacklist APIs** — static data
+**Live:** SPF, DMARC, and DKIM are resolved against real DNS (see [Live backend](#live-backend)).
+
+Cut for scope:
+- **Real blacklist APIs** — static data (needs paid/rate-limited feeds)
+- **Inbox placement** — synthetic (needs a seedlist provider)
 - **Historical trending** — single snapshot
 - **Multi-org view** — single tenant
 - **Auto-fix execution** — suggestions only, no API calls
 
 ## How to extend to production
 
-A production version would need:
-1. Live DNS lookups (via DNS-over-HTTPS or internal resolver)
-2. Real blacklist API integration (Spamhaus, Barracuda, SURBL, MXToolbox)
-3. Inbox placement testing (Seedlist providers like GlockApps or Mail-Tester)
-4. Historical trending and drift detection
-5. Webhook alerts when a domain's score drops below threshold
-6. Integration with registrars and DNS providers for auto-remediation
+The live DNS path already covers authentication-record inspection. A production version would add:
+1. Real blacklist API integration (Spamhaus, Barracuda, SURBL, MXToolbox)
+2. Inbox placement testing (seedlist providers like GlockApps or Mail-Tester)
+3. Historical trending and drift detection
+4. Webhook alerts when a domain's score drops below threshold
+5. Integration with registrars and DNS providers for auto-remediation
 
 ## Performance
 

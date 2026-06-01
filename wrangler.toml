@@ -1,0 +1,8 @@
+# Cloudflare Pages config. The static Astro site builds to ./dist; functions in
+# ./functions are deployed as Pages Functions (GET /inboxward/inspect).
+#
+#   pnpm build && npx wrangler pages dev dist   # serve site + functions locally
+#
+name = "inboxward-demo"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-11-01"
