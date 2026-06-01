@@ -41,11 +41,11 @@ The parsing helpers are pure functions, exported and unit-tested in [`tests/insp
 ```bash
 pnpm install
 pnpm test                                    # unit tests for the DNS-parsing logic
-pnpm dev                                     # static site only (synthetic fleet)
-pnpm build && npx wrangler pages dev dist    # site + live backend together
+pnpm dev                                     # static UI only — http://localhost:4321 (synthetic fleet)
+pnpm build && npx wrangler pages dev dist    # UI + live backend — http://localhost:8788
 ```
 
-Open `http://localhost:4321` for the UI; the live inspection endpoint is served by `wrangler pages dev`.
+The live inspection endpoint exists only under `wrangler pages dev` (port **8788**); `pnpm dev` (port 4321) serves the synthetic UI alone.
 
 ## What it proves
 
