@@ -14,7 +14,21 @@ import {
   parseCnameAnswers,
   countSpfMechanisms,
   parseDmarc,
+  onRequestGet,
 } from '../functions/inboxward/inspect.js';
+
+// The NXDOMAIN path is exercised end-to-end through onRequestGet with a mocked
+// global fetch standing in for dns.google — still no real network.
+function withMockedDoh(t, payload) {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () =>
+    new Response(JSON.stringify(payload), {
+      headers: { 'content-type': 'application/json' },
+    });
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+  });
+}
 
 test('normalizeDomain strips scheme, path, trailing dot, and case', () => {
   assert.equal(normalizeDomain('  HTTPS://Example.com/path?q=1 '), 'example.com');
@@ -68,4 +82,33 @@ test('parseDmarc reads policy, pct, and alignment', () => {
 
   // Unknown/absent policy falls back to "none" rather than trusting the input.
   assert.equal(parseDmarc('v=DMARC1; p=bogus').policy, 'none');
+});
+
+test('onRequestGet returns 404 domain-not-found on NXDOMAIN (DoH Status 3)', async (t) => {
+  withMockedDoh(t, { Status: 3 });
+
+  const response = await onRequestGet({
+    request: { url: 'https://demo.test/inboxward/inspect?domain=no-such-domain-9f3k2q.com' },
+  });
+
+  assert.equal(response.status, 404);
+  const payload = await response.json();
+  assert.equal(payload.code, 'nxdomain');
+  assert.match(payload.error, /does not exist/i);
+  // A nonexistent domain must not get a fake all-fail scorecard.
+  assert.equal(payload.spf_status, undefined);
+});
+
+test('onRequestGet still returns a 200 live inspection when the domain resolves', async (t) => {
+  withMockedDoh(t, { Status: 0, Answer: [{ data: '"v=spf1 -all"' }] });
+
+  const response = await onRequestGet({
+    request: { url: 'https://demo.test/inboxward/inspect?domain=example.com' },
+  });
+
+  assert.equal(response.status, 200);
+  const payload = await response.json();
+  assert.equal(payload.source, 'live');
+  assert.equal(payload.spf_record, 'v=spf1 -all');
+  assert.equal(payload.spf_status, 'pass');
 });

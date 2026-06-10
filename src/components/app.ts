@@ -275,7 +275,7 @@ function liveLookupNotes(domain: LiveDomainInspection): string {
   return `
     <div class="iw-live-notes">
       <div class="iw-live-notes-heading">Live lookup notes</div>
-      <p class="iw-live-note-body">Checked ${escapeHtml(domain.lookup_metadata.checked_at)} via ${escapeHtml(domain.lookup_metadata.dns_provider)}. ${escapeHtml(domain.lookup_metadata.note)}</p>
+      <p class="iw-live-note-body"><strong>${escapeHtml(domain.lookup_metadata.note)}</strong> Checked ${escapeHtml(domain.lookup_metadata.checked_at)} via ${escapeHtml(domain.lookup_metadata.dns_provider)}.</p>
       <div class="iw-live-grid">
         <div>
           <div class="iw-live-label">DMARC record</div>
@@ -303,7 +303,9 @@ function showDomainDetail(domain: Domain): void {
 
   const blacklistContent = domain.blacklist_statuses.length
     ? domain.blacklist_statuses.map((entry) => `<div class="iw-check-alert">${escapeHtml(entry.list)}: ${escapeHtml(entry.reason || 'listed')}</div>`).join('')
-    : '<div class="iw-check-detail">No blacklist data attached.</div>';
+    : liveDomain
+      ? '<div class="iw-check-detail">Live mode is DNS-only — blacklist feeds are demonstrated on the synthetic fleet.</div>'
+      : '<div class="iw-check-detail">No blacklist data attached.</div>';
 
   panel.innerHTML = `
     <div class="iw-detail-header">
@@ -345,14 +347,14 @@ function showDomainDetail(domain: Domain): void {
 
       <div class="iw-check">
         <div class="iw-check-label">Blacklist</div>
-        <div class="iw-check-value ${domain.blacklist_statuses.length ? 'fail' : 'pass'}">${domain.blacklist_statuses.length ? `${domain.blacklist_statuses.length} listed` : 'No flags attached'}</div>
+        <div class="iw-check-value ${domain.blacklist_statuses.length ? 'fail' : liveDomain ? 'warn' : 'pass'}">${domain.blacklist_statuses.length ? `${domain.blacklist_statuses.length} listed` : liveDomain ? 'Not checked — live mode' : 'No flags attached'}</div>
         ${blacklistContent}
       </div>
 
       <div class="iw-check">
         <div class="iw-check-label">Inbox Placement</div>
-        <div class="iw-check-value ${domain.last_inbox_test ? (domain.last_inbox_test.placement >= 80 ? 'pass' : domain.last_inbox_test.placement >= 50 ? 'warn' : 'fail') : 'warn'}">${domain.last_inbox_test ? `${domain.last_inbox_test.placement}% (${escapeHtml(domain.last_inbox_test.provider)})` : 'No seed test loaded'}</div>
-        <div class="iw-check-detail">${escapeHtml(domain.last_inbox_test ? `Tested ${domain.last_inbox_test.date}` : 'Live mode does not fetch inbox placement telemetry.')}</div>
+        <div class="iw-check-value ${domain.last_inbox_test ? (domain.last_inbox_test.placement >= 80 ? 'pass' : domain.last_inbox_test.placement >= 50 ? 'warn' : 'fail') : 'warn'}">${domain.last_inbox_test ? `${domain.last_inbox_test.placement}% (${escapeHtml(domain.last_inbox_test.provider)})` : liveDomain ? 'Not tested — live mode' : 'No seed test loaded'}</div>
+        <div class="iw-check-detail">${escapeHtml(domain.last_inbox_test ? `Tested ${domain.last_inbox_test.date}` : liveDomain ? 'Live mode is DNS-only — placement signals are demonstrated on the synthetic fleet.' : 'No seed test attached.')}</div>
       </div>
 
       <div class="iw-check">

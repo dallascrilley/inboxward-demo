@@ -149,6 +149,18 @@ export async function onRequestGet(context) {
       probeDkim(domain),
     ]);
 
+    // DoH Status 3 = NXDOMAIN: the name does not exist at all, so report
+    // "domain not found" instead of scoring a fake all-fail domain.
+    if (rootTxt?.Status === 3) {
+      return json(
+        {
+          error: `Domain not found: ${domain} does not exist in public DNS (NXDOMAIN).`,
+          code: 'nxdomain',
+        },
+        { status: 404 }
+      );
+    }
+
     const txtRecords = parseTxtAnswers(rootTxt);
     const spfRecord = txtRecords.find((record) => /^v=spf1\s/i.test(record)) || null;
     const spfMechanismCount = spfRecord ? countSpfMechanisms(spfRecord) : null;
