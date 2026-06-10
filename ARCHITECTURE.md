@@ -83,11 +83,11 @@ Remediations are generated deterministically from domain state:
 
 | File | Responsibility |
 |---|---|
-| `src/pages/index.astro` | Shell: nav, banner, sidebar + detail layout |
-| `src/components/app.ts` | Bootstrap, domain list rendering, detail panel, remediation cards |
-| `src/components/store.ts` | Data loading singleton |
-| `src/components/types.ts` | Shared interfaces |
-| `src/styles/inboxward.css` | Dark cockpit theme, risk color system, responsive grid |
+| `src/pages/index.astro` | Shell: nav, banner, live-lookup form, sidebar + detail + fleet-cockpit layout (cockpit ships neutral placeholders; all numbers are computed client-side) |
+| `src/components/app.ts` | Bootstrap, domain list rendering, detail panel, remediation cards, fleet cockpit instruments, live-lookup form handling (client-side hostname validation) |
+| `src/components/store.ts` | Data loading singleton + live inspection fetch (`/inboxward/inspect`) |
+| `src/components/types.ts` | Shared interfaces (synthetic `Domain` + `LiveDomainInspection`) |
+| `src/styles/inboxward.css` | Light deliverability-console theme, risk color system, responsive grid |
 
 ## What is live vs. cut for scope
 
