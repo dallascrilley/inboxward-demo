@@ -96,8 +96,8 @@ body::before {
 .iw-masthead {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 10px 4px 2px;
+  gap: 8px;
+  padding: 6px 4px 0;
 }
 
 .iw-masthead-row {
@@ -149,11 +149,11 @@ body::before {
 
 .iw-hook {
   margin: 0;
-  font-size: clamp(34px, 9vw, 56px);
-  line-height: 1.02;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  font-variation-settings: 'opsz' 96;
+  max-width: 44ch;
+  font-size: clamp(17px, 4.5vw, 22px);
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.015em;
 }
 .iw-hook em {
   font-style: normal;
@@ -162,9 +162,10 @@ body::before {
 
 .iw-sub {
   margin: 0;
-  max-width: 56ch;
+  max-width: 64ch;
   color: var(--iw-on-canvas-dim);
-  font-size: 15px;
+  font-family: var(--iw-mono);
+  font-size: 12px;
 }
 
 /* ── Scoreboard (cockpit) ─────────────────────────────────── */
