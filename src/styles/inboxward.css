@@ -632,9 +632,10 @@ body::before {
 
 .iw-detail-header {
   display: flex;
+  flex-wrap: wrap; /* long domain names take the full row; score block drops below */
   align-items: flex-start;
   justify-content: space-between;
-  gap: 14px;
+  gap: 10px 14px;
   padding-bottom: 16px;
   border-bottom: 2px solid var(--iw-card-sunken);
   margin-bottom: 16px;
@@ -642,9 +643,9 @@ body::before {
 
 .iw-detail-name {
   font-family: var(--iw-mono);
-  font-size: clamp(18px, 5vw, 24px);
+  font-size: clamp(16px, 4.2vw, 24px);
   font-weight: 700;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word; /* never single-character shatters; wrap stays a last resort */
 }
 
 .iw-detail-registrar {
