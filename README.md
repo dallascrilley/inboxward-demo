@@ -6,7 +6,7 @@
 
 Inboxward is an email-deliverability cockpit that audits SPF, DKIM, and DMARC across sending domains, scores deliverability risk, and generates prioritized remediation. It is a **hybrid proof**: a real backend performs live DNS inspection of any domain you type, and a synthetic fleet stands in for the signals that require paid external feeds.
 
-**Live demo:** [demos.dallascrilley.com/inboxward](https://demos.dallascrilley.com/inboxward) — type any domain (try `openai.com`) and the cockpit inspects it live.
+**Live demo:** [dallascrilley.com/demos/inboxward](https://dallascrilley.com/demos/inboxward) — type any domain (try `openai.com`) and the cockpit inspects it live.
 
 ## Real vs. synthetic — the honest boundary
 
@@ -31,7 +31,7 @@ The synthetic fleet (`public/data/domains.json`) demonstrates the scoring and re
 - returns a normalized verdict in the same shape as a synthetic domain, so the UI treats live and synthetic identically.
 
 ```bash
-curl "https://demos.dallascrilley.com/inboxward/inspect?domain=openai.com"
+curl "https://dallascrilley.com/demos/inboxward/inspect?domain=openai.com"
 ```
 
 The parsing helpers are pure functions, exported and unit-tested in [`tests/inspect.test.js`](tests/inspect.test.js).
