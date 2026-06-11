@@ -1,8 +1,8 @@
 ---
-// Inboxward — Deliverability cockpit
+// Inboxward — Signal Tower (mobile-first deliverability monitor)
 import '../styles/inboxward.css';
 const title = "Inboxward — 200 sending domains. 47 are in trouble. You don't know which.";
-const description = "Email deliverability cockpit: live SPF / DKIM / DMARC inspection on any domain, plus blacklist and inbox-placement scenarios on a labeled synthetic fleet.";
+const description = "Email deliverability monitor: live SPF / DKIM / DMARC inspection on any domain, plus blacklist and inbox-placement scenarios on a labeled synthetic fleet.";
 ---
 <!doctype html>
 <html lang="en">
@@ -16,76 +16,46 @@ const description = "Email deliverability cockpit: live SPF / DKIM / DMARC inspe
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="theme-color" content="#1d2f7b" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Sometype+Mono:wght@400;500;700&display=swap" />
   </head>
   <body>
     <div class="iw-root">
-      <nav class="iw-nav" aria-label="Inboxward navigation">
-        <span class="iw-logo">inboxward</span>
-        <span class="iw-nav-sep" aria-hidden="true"></span>
-        <span class="iw-nav-label">Deliverability Cockpit</span>
-        <span class="iw-nav-spacer"></span>
-        <span class="iw-nav-live">live backend</span>
-        <span class="iw-nav-label" style="font-family:var(--iw-mono);font-size:11px;color:var(--iw-muted)">Synthetic scenarios</span>
-      </nav>
 
-      <div class="iw-banner" role="status">
-        <span class="iw-banner-icon" aria-hidden="true">◈</span>
-        <p class="iw-banner-text"><strong>Hybrid proof surface.</strong> The default queue still uses synthetic domains for blacklist and inbox-placement scenarios, but you can now run a <em>real live DNS inspection</em> against any public domain. Live mode checks SPF, DMARC, and common DKIM selectors through a Cloudflare Pages backend. <em>No API keys required in the browser.</em></p>
-      </div>
-
-      <section class="iw-live-panel" aria-label="Live DNS inspection">
-        <div>
-          <div class="iw-live-title">Inspect a real domain</div>
-          <p class="iw-live-copy">Run a live SPF / DKIM / DMARC check against any public domain. Blacklist feeds and inbox placement stay synthetic unless you wire paid providers behind the backend.</p>
+      <header class="iw-masthead">
+        <div class="iw-masthead-row">
+          <span class="iw-logo">inbox<em>ward</em></span>
+          <span class="iw-live-pill"><span class="iw-live-dot" aria-hidden="true"></span>live backend</span>
         </div>
-        <form class="iw-live-form" id="iw-live-form">
-          <input class="iw-live-input" id="iw-live-domain" name="domain" type="text" inputmode="url" autocomplete="off" placeholder="example.com" aria-label="Domain to inspect" />
-          <button class="iw-live-submit" id="iw-live-submit" type="submit">Run live lookup</button>
-        </form>
-        <div class="iw-live-status" id="iw-live-status" aria-live="polite">Try a public domain like openai.com or cloudflare.com.</div>
-      </section>
+        <h1 class="iw-hook">200 sending domains.<br /><em>47 are in trouble.</em><br />You don't know which.</h1>
+        <p class="iw-sub">Pocket deliverability monitor — live SPF / DKIM / DMARC on any real domain; blacklist and placement scenarios on a labeled synthetic fleet.</p>
+      </header>
 
-      <div class="iw-layout">
-        <aside class="iw-sidebar" aria-label="Domain list">
-          <div class="iw-sidebar-header">
-            <span class="iw-sidebar-title">Domains</span>
-          </div>
-          <div class="iw-stats" id="iw-stats"></div>
-          <div class="iw-domain-list" id="iw-domain-list" role="list" aria-label="Sending domains"></div>
-        </aside>
-
-        <main class="iw-main" id="iw-detail-panel" role="main" aria-label="Domain detail">
-          <div class="iw-placeholder">Select a domain to inspect deliverability posture.</div>
-        </main>
-
-        <aside class="iw-cockpit" aria-label="Fleet deliverability instruments">
-          <div class="iw-cockpit-bar">
-            <span class="iw-cockpit-title">Fleet status</span>
-            {/* Cockpit ships as neutral placeholders — every number here is
-                computed from the loaded dataset by renderCockpit(), never
-                hardcoded, so nothing fake can flash or survive a JS failure. */}
-            <span class="iw-cockpit-sub" id="iw-fleet-count">loading…</span>
-          </div>
-
-          <section class="iw-instrument" aria-labelledby="iw-gauge-cap">
-            <div class="iw-instr-label" id="iw-gauge-cap">Deliverability index</div>
-            <div class="iw-gauge">
-              <svg class="iw-gauge-svg" id="iw-gauge-svg" viewBox="0 0 120 120" role="img" aria-label="Fleet deliverability index loading">
-                <circle class="iw-gauge-track" cx="60" cy="60" r="52" />
-                <circle class="iw-gauge-fill" id="iw-gauge-fill" cx="60" cy="60" r="52"
-                  style="--iw-gauge-pct:0" />
-              </svg>
-              <div class="iw-gauge-readout">
-                <span class="iw-gauge-num" id="iw-gauge-num">–</span>
-                <span class="iw-gauge-unit">/100</span>
-              </div>
+      {/* Fleet score strip — every number computed from the loaded dataset by
+          renderCockpit(), never hardcoded, so nothing fake can flash or survive
+          a JS failure. */}
+      <section class="iw-scoreboard" aria-label="Fleet deliverability instruments">
+        <div class="iw-score-main">
+          <div class="iw-gauge">
+            <svg class="iw-gauge-svg" id="iw-gauge-svg" viewBox="0 0 120 120" role="img" aria-label="Fleet deliverability index loading">
+              <circle class="iw-gauge-track" cx="60" cy="60" r="52" />
+              <circle class="iw-gauge-fill" id="iw-gauge-fill" cx="60" cy="60" r="52" style="--iw-gauge-pct:0" />
+            </svg>
+            <div class="iw-gauge-readout">
+              <span class="iw-gauge-num" id="iw-gauge-num">–</span>
+              <span class="iw-gauge-unit">/100</span>
             </div>
-            <div class="iw-gauge-caption">Mean health score across the fleet</div>
-          </section>
+          </div>
+          <div class="iw-score-copy">
+            <div class="iw-score-label">Fleet deliverability index</div>
+            <div class="iw-score-fleet" id="iw-fleet-count">loading…</div>
+            <div class="iw-stats" id="iw-stats"></div>
+          </div>
+        </div>
 
+        <div class="iw-instruments">
           <section class="iw-instrument" aria-label="Authentication coverage">
             <div class="iw-instr-label">Auth coverage</div>
             <ul class="iw-auth-list" id="iw-auth-list">
@@ -114,8 +84,37 @@ const description = "Email deliverability cockpit: live SPF / DKIM / DMARC inspe
               <li class="iw-todo-item"><span class="iw-todo-dot" aria-hidden="true"></span>Computing fleet issues…</li>
             </ul>
           </section>
-        </aside>
+        </div>
+      </section>
+
+      <section class="iw-live-panel" aria-label="Live DNS inspection">
+        <div class="iw-live-head">
+          <span class="iw-live-kicker">Live lookup</span>
+          <h2 class="iw-live-title">Inspect a real domain</h2>
+          <p class="iw-live-copy">Real SPF / DKIM / DMARC check against any public domain, through a Cloudflare Pages backend. No API keys in the browser. Blacklist feeds and inbox placement stay synthetic.</p>
+        </div>
+        <form class="iw-live-form" id="iw-live-form">
+          <input class="iw-live-input" id="iw-live-domain" name="domain" type="text" inputmode="url" autocomplete="off" placeholder="example.com" aria-label="Domain to inspect" />
+          <button class="iw-live-submit" id="iw-live-submit" type="submit">Run lookup</button>
+        </form>
+        <div class="iw-live-status" id="iw-live-status" aria-live="polite">Try a public domain like openai.com or cloudflare.com.</div>
+      </section>
+
+      <div class="iw-layout">
+        <section class="iw-fleet" aria-label="Domain list">
+          <div class="iw-fleet-header">
+            <h2 class="iw-fleet-title">Domains</h2>
+            <span class="iw-fleet-note">sorted worst-first</span>
+          </div>
+          <div class="iw-domain-list" id="iw-domain-list" role="list" aria-label="Sending domains"></div>
+        </section>
+
+        <main class="iw-main" id="iw-detail-panel" role="main" aria-label="Domain detail">
+          <div class="iw-placeholder">Tap a domain to inspect deliverability posture.</div>
+        </main>
       </div>
+
+      <p class="iw-foot-note">Hybrid proof surface — synthetic fleet for blacklist and placement scenarios, real DNS for the live lookup.</p>
     </div>
     <script>import '../components/app.ts';</script>
   </body>

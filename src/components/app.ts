@@ -292,7 +292,7 @@ function liveLookupNotes(domain: LiveDomainInspection): string {
   `;
 }
 
-function showDomainDetail(domain: Domain): void {
+function showDomainDetail(domain: Domain, scroll = true): void {
   const panel = el('iw-detail-panel');
   if (!panel) return;
 
@@ -379,6 +379,13 @@ function showDomainDetail(domain: Domain): void {
       </div>
     ` : ''}
   `;
+
+  // Mobile-first layout stacks list above detail — bring the detail into view
+  // on user-initiated selections (the initial render must not move the page;
+  // desktop keeps the panel sticky alongside the list).
+  if (scroll && window.matchMedia('(max-width: 979px)').matches) {
+    panel.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
 }
 
 async function handleLiveLookup(domains: Domain[]): Promise<void> {
@@ -425,7 +432,7 @@ async function handleLiveLookup(domains: Domain[]): Promise<void> {
 async function init(): Promise<void> {
   const domains = await loadDomains();
   renderDomainList(domains);
-  if (domains.length > 0) showDomainDetail(domains[0]);
+  if (domains.length > 0) showDomainDetail(domains[0], false);
   await handleLiveLookup(domains);
 }
 
