@@ -1,0 +1,3 @@
+# GitHub language stats: the demo is a TypeScript project; the design-system
+# stylesheet outweighs the code by bytes and flips the pinned-card language.
+src/styles/*.css linguist-detectable=false
