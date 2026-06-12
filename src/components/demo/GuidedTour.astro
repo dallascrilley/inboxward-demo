@@ -6,17 +6,19 @@ interface TourStep {
 
 interface Props {
   title?: string;
+  repoLabel: string;
   repoUrl: string;
   steps: readonly TourStep[];
 }
 
-const { title = '60-second walkthrough', repoUrl, steps } = Astro.props;
+const { title = '60-second walkthrough', repoLabel, repoUrl, steps } = Astro.props;
+const repoLinkText = `Open ${repoLabel} proof repo`;
 ---
 
-<section class="guided-tour" aria-labelledby="guided-tour-title">
+<section class="guided-tour" aria-label={title}>
   <div class="guided-tour-head">
     <span class="guided-tour-kicker">Guided tour</span>
-    <h2 id="guided-tour-title">{title}</h2>
+    <h2>{title}</h2>
   </div>
   <ol class="guided-tour-steps">
     {steps.map((step, index) => (
@@ -29,7 +31,7 @@ const { title = '60-second walkthrough', repoUrl, steps } = Astro.props;
       </li>
     ))}
   </ol>
-  <a class="guided-tour-repo" href={repoUrl} target="_blank" rel="noopener noreferrer">Open proof repo</a>
+  <a class="guided-tour-repo" href={repoUrl} target="_blank" rel="noopener noreferrer" aria-label={`${repoLinkText} (opens in a new tab)`}>{repoLinkText}</a>
 </section>
 
 <style>
