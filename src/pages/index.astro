@@ -1,6 +1,8 @@
 ---
 // Inboxward — Signal Tower (mobile-first deliverability monitor)
 import '../styles/inboxward.css';
+import GuidedTour from '../components/demo/GuidedTour.astro';
+import { GUIDED_TOURS } from '../data/guidedTours';
 const title = "Inboxward — 200 sending domains. 47 are in trouble. You don't know which.";
 const description = "Email deliverability monitor: live SPF / DKIM / DMARC inspection on any domain, plus blacklist and inbox-placement scenarios on a labeled synthetic fleet.";
 ---
@@ -32,6 +34,8 @@ const description = "Email deliverability monitor: live SPF / DKIM / DMARC inspe
         <h1 class="iw-hook">200 sending domains. <em>47 are in trouble.</em> You don't know which.</h1>
         <p class="iw-sub">Live SPF / DKIM / DMARC on any real domain · blacklist + placement on a labeled synthetic fleet.</p>
       </header>
+
+      <GuidedTour {...GUIDED_TOURS.inboxward} />
 
       {/* Fleet score strip — every number computed from the loaded dataset by
           renderCockpit(), never hardcoded, so nothing fake can flash or survive
