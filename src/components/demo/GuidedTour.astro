@@ -1,0 +1,131 @@
+---
+interface TourStep {
+  label: string;
+  body: string;
+}
+
+interface Props {
+  title?: string;
+  repoUrl: string;
+  steps: TourStep[];
+}
+
+const { title = '60-second walkthrough', repoUrl, steps } = Astro.props;
+---
+
+<section class="guided-tour" aria-labelledby="guided-tour-title">
+  <div class="guided-tour-head">
+    <span class="guided-tour-kicker">Guided tour</span>
+    <h2 id="guided-tour-title">{title}</h2>
+  </div>
+  <ol class="guided-tour-steps">
+    {steps.map((step, index) => (
+      <li class="guided-tour-step">
+        <span class="guided-tour-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+        <div>
+          <h3>{step.label}</h3>
+          <p>{step.body}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+  <a class="guided-tour-repo" href={repoUrl} target="_blank" rel="noopener noreferrer">Open proof repo</a>
+</section>
+
+<style>
+  .guided-tour {
+    margin: clamp(18px, 3vw, 30px) 0;
+    padding: clamp(16px, 2vw, 22px);
+    border: 1px solid color-mix(in oklch, currentColor 18%, transparent);
+    border-radius: 8px;
+    background: color-mix(in oklch, currentColor 5%, transparent);
+    color: inherit;
+  }
+
+  .guided-tour-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .guided-tour-kicker {
+    font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.68;
+  }
+
+  .guided-tour h2 {
+    margin: 0;
+    font-size: clamp(18px, 2vw, 24px);
+    line-height: 1.12;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  .guided-tour-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .guided-tour-step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid color-mix(in oklch, currentColor 13%, transparent);
+    border-radius: 6px;
+    background: color-mix(in oklch, currentColor 4%, transparent);
+  }
+
+  .guided-tour-index {
+    font: 700 12px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    opacity: 0.62;
+  }
+
+  .guided-tour h3 {
+    margin: 0 0 5px;
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  .guided-tour p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.45;
+    opacity: 0.76;
+    text-wrap: pretty;
+  }
+
+  .guided-tour-repo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    margin-top: 14px;
+    color: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 760px) {
+    .guided-tour-head {
+      display: grid;
+      gap: 6px;
+    }
+
+    .guided-tour-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
