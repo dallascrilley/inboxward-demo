@@ -7,7 +7,7 @@ interface TourStep {
 interface Props {
   title?: string;
   repoUrl: string;
-  steps: TourStep[];
+  steps: readonly TourStep[];
 }
 
 const { title = '60-second walkthrough', repoUrl, steps } = Astro.props;
